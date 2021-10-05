@@ -7,7 +7,7 @@ type AddItemFormPropsType = {
 }
 
 const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
-    const [title, setTitle] = useState("");
+    const [title, setTitle] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const onChangHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
@@ -23,6 +23,8 @@ const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
         if (newTitle !== "") {
             addItem(newTitle);
             setTitle("");
+        } else {
+            setError("error");
         }
     }
     return (
