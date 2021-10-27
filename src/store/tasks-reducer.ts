@@ -1,6 +1,7 @@
-import {TasksStateType} from "../App";
+import {TasksStateType} from "../components/App";
 import {v1} from "uuid";
 import {AddTodoListActionType} from "./todoList-reducer";
+import {TaskType} from "../components/Todolist";
 
 export type RemoveTaskActionType = {
     type: "REMOVE_TASK"
@@ -45,7 +46,7 @@ export const tasksReducer = (state = initialState, action: ActionType): TasksSta
         case "REMOVE_TASK":
             return {
                 ...state,
-                [action.todoListId]: state[action.todoListId].filter(task => task.id !== action.taskId)
+                [action.todoListId]: state[action.todoListId].filter((task: TaskType) => task.id !== action.taskId)
             }
         case "ADD_TASK":
             return {
@@ -55,7 +56,7 @@ export const tasksReducer = (state = initialState, action: ActionType): TasksSta
         case "CHANGE_TASK_STATUS":
             return {
                 ...state,
-                [action.todolistId]: state[action.todolistId].map(el => el.id === action.id ? {
+                [action.todolistId]: state[action.todolistId].map((el: TaskType) => el.id === action.id ? {
                     ...el,
                     isDone: action.isDone
                 } : el)
@@ -63,7 +64,7 @@ export const tasksReducer = (state = initialState, action: ActionType): TasksSta
         case "CHANGE_TASK_TITLE":
             return {
                 ...state,
-                [action.todolistId]: state[action.todolistId].map(el => el.id === action.id ? {
+                [action.todolistId]: state[action.todolistId].map((el: TaskType) => el.id === action.id ? {
                     ...el,
                     title: action.newTitle
                 } : el)
@@ -74,7 +75,6 @@ export const tasksReducer = (state = initialState, action: ActionType): TasksSta
                 [action.id]: []
             }
         case "REMOVE_TODOLIST":
-            // const {[action.id]: [], ...copyState} = {...state}
             const copyState = {...state}
             delete copyState[action.id]
             return copyState

@@ -1,4 +1,4 @@
-import React, {ChangeEvent, KeyboardEvent, useState} from 'react';
+import React, {ChangeEvent, KeyboardEvent, useCallback, useState} from 'react';
 import {IconButton, TextField} from "@material-ui/core";
 import {AddBox} from "@material-ui/icons";
 
@@ -6,19 +6,23 @@ type AddItemFormPropsType = {
     addItem: (title: string) => void
 }
 
-const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
+
+export const AddItemForm = React.memo(function ({addItem}: AddItemFormPropsType) {
+
     const [title, setTitle] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
     const onChangHandler = (e: ChangeEvent<HTMLInputElement>) => {
         setTitle(e.currentTarget.value)
     }
     const onKeyPressHandler = ({charCode}: KeyboardEvent<HTMLInputElement>) => {
-        setError(null);
+        if (error !== null) {
+            setError(null);
+        }
         if (charCode === 13) {
             addTask();
         }
     }
-    const addTask = () => {
+    const addTask = useCallback(() => {
         const newTitle = title.trim();
         if (newTitle !== "") {
             addItem(newTitle);
@@ -26,7 +30,7 @@ const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
         } else {
             setError("error");
         }
-    }
+    }, [addItem, title])
     return (
         <div>
             <TextField value={title}
@@ -47,6 +51,4 @@ const AddItemForm: React.FC<AddItemFormPropsType> = ({addItem}) => {
             </IconButton>
         </div>
     );
-};
-
-export default AddItemForm;
+})
